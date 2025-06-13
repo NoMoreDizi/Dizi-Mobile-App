@@ -1,29 +1,33 @@
 {
   "expo": {
-    "name": "dizi",
-    "slug": "dizi",
-    "version": "1.0.0",
+    "name": "Dizi",
+    "slug": "Dizi",
+    "version": "0.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "icon": "./assets/images/app/DiziAppIcon.png",
+    "scheme": "dizi",
+    "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "ios": {
       "supportsTablet": true
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/icon.png",
-        "backgroundColor": "#ffffff"
-      },
       "edgeToEdgeEnabled": true
     },
-    "web": {
-      "favicon": "./assets/icon.png"
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/app/DiziAppIcon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
     }
   }
 }
