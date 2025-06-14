@@ -57,6 +57,14 @@ export default tseslint.config(
     },
   },
 
+  // Disable Rules for test files (placed after the main TypeScript config to ensure override)
+  {
+    files: ["**/__tests__/**/*"],
+    rules: {
+      "@typescript-eslint/no-unsafe-return": "off",
+    },
+  },
+
   // Ignore patterns (should be at the end of the config array)
   includeIgnoreFile(
     fileURLToPath(new URL(".gitignore", import.meta.url)),
