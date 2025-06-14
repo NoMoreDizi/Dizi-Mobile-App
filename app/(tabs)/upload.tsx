@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 export default function UploadScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Home Screen</Text>
+      <Text style={styles.title}>Upload Screen</Text>
     </View>
   );
 }

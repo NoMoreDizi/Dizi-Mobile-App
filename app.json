@@ -4,7 +4,7 @@
     "slug": "Dizi",
     "version": "0.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/app/DiziAppIcon.png",
+    "icon": "./assets/images/app/logo/DiziAppIcon.png",
     "scheme": "dizi",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -19,7 +19,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/app/DiziAppIcon.png",
+          "image": "./assets/images/app/logo/DiziAppIcon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
