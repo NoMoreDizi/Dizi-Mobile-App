@@ -13,7 +13,9 @@
     "testDebug": "jest -o --watch --coverage=false",
     "testFinal": "jest --coverage=true",
     "updateSnapshots": "jest -u --coverage=false",
-    "doctor": "npx expo-doctor"
+    "doctor": "npx expo-doctor",
+    "generate": "graphql-codegen",
+    "ci": "npm run lint && npm run testFinal"
   },
   "jest": {
     "preset": "jest-expo",
@@ -22,9 +24,13 @@
     ],
     "setupFiles": [
       "./jest-setup.ts"
+    ],
+    "coveragePathIgnorePatterns": [
+      "graphql"
     ]
   },
   "dependencies": {
+    "@apollo/client": "^3.13.8",
     "@expo/vector-icons": "^14.1.0",
     "@react-navigation/bottom-tabs": "^7.3.10",
     "@react-navigation/elements": "^2.3.8",
@@ -41,6 +47,7 @@
     "expo-status-bar": "~2.2.3",
     "expo-symbols": "~0.4.5",
     "expo-system-ui": "~5.0.8",
+    "graphql": "^16.11.0",
     "react": "19.0.0",
     "react-native": "0.79.3",
     "react-native-gesture-handler": "~2.24.0",
@@ -50,7 +57,14 @@
     "react-native-webview": "13.13.5"
   },
   "devDependencies": {
+    "@0no-co/graphqlsp": "^1.12.16",
     "@babel/core": "^7.25.2",
+    "@graphql-codegen/cli": "^5.0.7",
+    "@graphql-codegen/client-preset": "^4.8.2",
+    "@graphql-codegen/typescript": "^4.1.6",
+    "@graphql-codegen/typescript-operations": "^4.6.1",
+    "@graphql-eslint/eslint-plugin": "^4.4.0",
+    "@parcel/watcher": "^2.5.1",
     "@testing-library/react-native": "^13.2.0",
     "@types/jest": "^29.5.14",
     "@types/react": "~19.0.10",

@@ -1,0 +1,21 @@
+"""
+General Data specific to a User.
+"""
+type UserDetails {
+  id: ID!
+
+  """
+  How much in App Currency (i.e. Karma) the User currently has.
+  """
+  inAppCurrency: Int!
+}
+
+"""
+All Entry Points.
+"""
+type Query {
+  """
+  Fetches the current User's general data
+  """
+  userDetails: UserDetails!
+}

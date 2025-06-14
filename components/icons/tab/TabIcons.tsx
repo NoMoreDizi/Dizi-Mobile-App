@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { type ComponentProps } from "react";
-import { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
+import type { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
 
 export function HomeIcon({ size, color }: TabBarIconProps) {
   return <Ionicons name="home" size={size} color={color} />;
