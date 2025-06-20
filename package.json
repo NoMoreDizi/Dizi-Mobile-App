@@ -15,7 +15,7 @@
     "updateSnapshots": "jest -u --coverage=false",
     "doctor": "npx expo-doctor",
     "generate": "graphql-codegen",
-    "ci": "npm run lint && npm run testFinal"
+    "ci": "npm run doctor && npm run lint && npm run testFinal"
   },
   "jest": {
     "preset": "jest-expo",
@@ -26,8 +26,20 @@
       "./jest-setup.ts"
     ],
     "coveragePathIgnorePatterns": [
-      "graphql"
+      "graphql",
+      "jest/*.ts"
     ]
+  },
+  "expo": {
+    "doctor": {
+      "reactNativeDirectoryCheck": {
+        "enabled": true,
+        "exclude": [
+          "graphql",
+          "@apollo/client"
+        ]
+      }
+    }
   },
   "dependencies": {
     "@apollo/client": "^3.13.8",
