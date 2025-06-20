@@ -17,7 +17,7 @@ export function TabHeader({
     <View style={[styles.container, headerStyle as StyleProp<ViewStyle>]}>
       <View style={styles.logoContainer}>
         <Image
-          source={DiziLogoRound()}
+          source={DiziLogoRound}
           contentFit="contain"
           accessibilityLabel="Dizi's round Logo"
           style={{ height: 50, width: 50 }}
