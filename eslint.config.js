@@ -1,8 +1,10 @@
 // https://docs.expo.dev/guides/using-eslint/
+import { fileURLToPath } from "node:url";
 import expoConfig from "eslint-config-expo/flat.js";
 import tseslint from "typescript-eslint";
 import prettierPluginRecommended from "eslint-plugin-prettier/recommended"; // Use this for combined Prettier config
 import graphqlPlugin from "@graphql-eslint/eslint-plugin";
+import { includeIgnoreFile } from "@eslint/compat";
 
 export default tseslint.config(
   // Base configuration that applies to all files by default
@@ -56,6 +58,10 @@ export default tseslint.config(
   },
 
   // Ignore patterns (should be at the end of the config array)
+  includeIgnoreFile(
+    fileURLToPath(new URL(".gitignore", import.meta.url)),
+    "Imported .gitignore patterns",
+  ),
   {
     ignores: [
       "dist/*",
