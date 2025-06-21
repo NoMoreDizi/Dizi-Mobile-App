@@ -1,12 +1,22 @@
 // https://docs.expo.dev/guides/using-eslint/
 import expoConfig from "eslint-config-expo/flat.js";
-import { defineConfig } from "eslint/config";
+import tseslint from "typescript-eslint";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 
-export default defineConfig([
+export default tseslint.config([
   expoConfig,
+  tseslint.configs.strictTypeChecked,
+  tseslint.configs.stylisticTypeChecked,
+  {
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
   eslintPluginPrettierRecommended,
   {
-    ignores: ["dist/*"],
+    ignores: ["dist/*", "coverage/**", "eslint.config.js"],
   },
 ]);
