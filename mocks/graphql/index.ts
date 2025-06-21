@@ -1,3 +1,6 @@
-import { UserDetailsMocks } from "@/mocks/graphql/UserDetails.mock";
+import { UserDetailsMock } from "@/mocks/graphql/UserDetails.mock";
+import { ApolloMockType } from "@/mocks/graphql/constants";
 
-export default [...UserDetailsMocks] as const;
+const mockType = ApolloMockType.UI;
+
+export default [...new UserDetailsMock(mockType).asArray];
