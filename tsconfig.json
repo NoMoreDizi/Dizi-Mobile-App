@@ -5,8 +5,17 @@
     "paths": {
       "@/*": [
         "./*"
-      ]
-    }
+      ],
+//      "tslib": [
+//        "./node_modules/tslib/tslib.d.ts"
+//      ]
+    },
+    "plugins": [
+      {
+        "name": "@0no-co/graphqlsp",
+        "schema": "./graphql/schema/schema.graphql"
+      }
+    ]
   },
   "include": [
     "**/*.ts",
