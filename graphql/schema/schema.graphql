@@ -11,6 +11,35 @@ type UserDetails {
 }
 
 """
+Represents a dilemma with voting options.
+"""
+type Dilemma {
+  id: ID!
+
+  """
+  The title of the Dilemma
+  """
+  title: String!
+
+  """
+  The number of votes for this dilemma.
+  """
+  votes: Int!
+
+  """
+  Information about when the dilemma was posted.
+  """
+  postedBefore: PostedBeforePayload!
+}
+
+"""
+Information about when an entity was posted.
+"""
+type PostedBeforePayload {
+  timestamp: String!
+}
+
+"""
 All Entry Points.
 """
 type Query {
@@ -18,4 +47,23 @@ type Query {
   Fetches the current User's general data
   """
   userDetails: UserDetails!
+
+  """
+  Fetches a dilemma with its votes and posting time information
+
+  This is to be enriched by a local only Field of type `PostedBefore` on the client.
+
+  # Example
+
+  ```gql
+  query dilemma {
+    votes
+    postedBeforeInfo: {
+      timestamp
+      postedBefore @client #<==
+    }
+  }
+  ```
+  """
+  dilemma: Dilemma!
 }
