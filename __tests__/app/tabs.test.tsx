@@ -8,6 +8,9 @@ import ShopScreen from "@/app/(tabs)/shop";
 import UploadScreen from "@/app/(tabs)/upload";
 import ProfileScreen from "@/app/(tabs)/profile";
 import { TabBar } from "@/components/tabs/TabBar";
+import { ignoreZeroPaddingWarning } from "@/helpers/jest";
+
+ignoreZeroPaddingWarning();
 
 describe("Bottom Navigation Bar", () => {
   it.each<[RegExp, string]>([

@@ -19,3 +19,25 @@ export function ignoreFalseActWarning() {
     console.error = originalError;
   });
 }
+
+export function ignoreZeroPaddingWarning() {
+  const originalError = console.warn;
+
+  beforeAll(() => {
+    console.warn = (...args: string[]) => {
+      if (
+        args[0].includes(
+          "paddingTop was given a value of 0, this has no effect on headerStyle.",
+        )
+      ) {
+        return;
+      } else {
+        originalError.call(console, ...args);
+      }
+    };
+  });
+
+  afterAll(() => {
+    console.error = originalError;
+  });
+}

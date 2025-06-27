@@ -40,7 +40,10 @@ export default tseslint.config(
       parser: graphqlPlugin.parser,
       parserOptions: {
         graphQLConfig: {
-          schema: "./graphql/schema/schema.graphql", // Path to your GraphQL schema
+          schema: [
+            "./graphql/schema/schema.graphql",
+            "./graphql/schema/localSchema.graphql",
+          ], // Path to your local GraphQL schemas
 
           // NOTE: This could become relevant if using Fragments in separate Files: `documents: "./compontents/**/*.tsx"`,
           // Source: https://the-guild.dev/graphql/eslint/docs/usage#providing-operations
@@ -52,6 +55,10 @@ export default tseslint.config(
     },
     rules: {
       ...graphqlPlugin.configs["schema-recommended"].rules,
+      "@graphql-eslint/strict-id-in-types": [
+        "error",
+        { exceptions: { suffixes: ["Payload"] } },
+      ],
       // Apply prettier formatting directly to GraphQL files
       "prettier/prettier": "error",
     },
