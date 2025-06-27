@@ -4,6 +4,7 @@ export const GET_DILEMMA = gql(`
   query Dilemma {
     dilemma {
       title
+      ...DilemmaAssets
       votes
       postedBefore {
         timestamp

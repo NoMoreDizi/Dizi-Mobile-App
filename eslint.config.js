@@ -44,9 +44,6 @@ export default tseslint.config(
             "./graphql/schema/schema.graphql",
             "./graphql/schema/localSchema.graphql",
           ], // Path to your local GraphQL schemas
-
-          // NOTE: This could become relevant if using Fragments in separate Files: `documents: "./compontents/**/*.tsx"`,
-          // Source: https://the-guild.dev/graphql/eslint/docs/usage#providing-operations
         },
       },
     },
