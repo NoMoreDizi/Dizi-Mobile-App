@@ -17,6 +17,10 @@
     "generate": "graphql-codegen",
     "ci": "npm run doctor && npm run lint && npm run testFinal"
   },
+  "engineStrict": true,
+  "engines": {
+    "node": "22"
+  },
   "jest": {
     "preset": "jest-expo",
     "transformIgnorePatterns": [
