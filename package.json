@@ -16,7 +16,8 @@
     "updateSnapshots": "jest -u --coverage=false",
     "doctor": "npx expo-doctor",
     "generate": "graphql-codegen",
-    "ci": "npm run doctor && npm run lint && npm run tsCheck && npm run testFinal"
+    "ci": "npm run doctor && npm run lint && npm run tsCheck && npm run testFinal",
+    "pullEnv": "eas env:pull --environment development"
   },
   "engineStrict": true,
   "engines": {
