@@ -17,6 +17,8 @@ export type Scalars = {
 /** Represents a dilemma with voting options. */
 export type Dilemma = {
   __typename?: 'Dilemma';
+  /** Optional list of assets to display with the Dilemma. */
+  assets?: Maybe<Array<DilemmaAsset>>;
   id: Scalars['ID']['output'];
   /** Information about when the dilemma was posted. */
   postedBefore: PostedBeforePayload;
@@ -24,6 +26,18 @@ export type Dilemma = {
   title: Scalars['String']['output'];
   /** The number of votes for this dilemma. */
   votes: Scalars['Int']['output'];
+};
+
+/** Assets related to a Dilemma. */
+export type DilemmaAsset = {
+  __typename?: 'DilemmaAsset';
+  /** Label to read aloud for Screen Reader. */
+  accessibilityLabel: Scalars['String']['output'];
+  /** Blurred Image Hash to display while loading the real asset. */
+  blurhash: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  /** The URL to fetch this asset. */
+  url: Scalars['String']['output'];
 };
 
 /** The Duration since when a Dilemma was posted. */
@@ -86,10 +100,12 @@ export type UserDetails = {
   inAppCurrency: Scalars['Int']['output'];
 };
 
+export type DilemmaAssetsFragment = { __typename?: 'Dilemma', assets?: Array<{ __typename?: 'DilemmaAsset', id: string, url: string, blurhash: string, accessibilityLabel: string }> | null };
+
 export type DilemmaQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type DilemmaQuery = { __typename?: 'Query', dilemma: { __typename?: 'Dilemma', title: string, votes: number, postedBefore: { __typename?: 'PostedBeforePayload', timestamp: string, duration: { __typename?: 'DurationPayload', type: Period, amount: number } } } };
+export type DilemmaQuery = { __typename?: 'Query', dilemma: { __typename?: 'Dilemma', title: string, votes: number, postedBefore: { __typename?: 'PostedBeforePayload', timestamp: string, duration: { __typename?: 'DurationPayload', type: Period, amount: number } }, assets?: Array<{ __typename?: 'DilemmaAsset', id: string, url: string, blurhash: string, accessibilityLabel: string }> | null } };
 
 export type UserDetailsQueryVariables = Exact<{ [key: string]: never; }>;
 

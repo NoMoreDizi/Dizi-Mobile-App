@@ -16,7 +16,8 @@
     "updateSnapshots": "jest -u --coverage=false",
     "doctor": "npx expo-doctor",
     "generate": "graphql-codegen",
-    "ci": "npm run doctor && npm run lint && npm run tsCheck && npm run testFinal"
+    "ci": "npm run doctor && npm run lint && npm run tsCheck && npm run testFinal",
+    "pullEnv": "eas env:pull --environment development"
   },
   "engineStrict": true,
   "engines": {
@@ -44,6 +45,7 @@
           "graphql",
           "@apollo/client",
           "luxon",
+          "unsplash-js",
           "lorem-ipsum"
         ]
       }
@@ -77,7 +79,8 @@
     "react-native-reanimated": "~3.17.4",
     "react-native-safe-area-context": "5.4.0",
     "react-native-screens": "~4.11.1",
-    "react-native-webview": "13.13.5"
+    "react-native-webview": "13.13.5",
+    "unsplash-js": "^7.0.19"
   },
   "devDependencies": {
     "@0no-co/graphqlsp": "^1.12.16",

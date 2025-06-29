@@ -1,14 +1,9 @@
 import { renderRouter } from "expo-router/testing-library";
 import { screen } from "@testing-library/react-native";
 import { setup } from "@testing-library/react-native/build/user-event/setup";
-import RootLayout from "@/app/_layout";
-import HomeScreen from "@/app/(tabs)";
-import SearchScreen from "@/app/(tabs)/search";
-import ShopScreen from "@/app/(tabs)/shop";
-import UploadScreen from "@/app/(tabs)/upload";
-import ProfileScreen from "@/app/(tabs)/profile";
 import { TabBar } from "@/components/tabs/TabBar";
 import { ignoreZeroPaddingWarning } from "@/helpers/jest";
+import RootStack from "@/components/stacks/RootStack";
 
 ignoreZeroPaddingWarning();
 
@@ -25,13 +20,13 @@ describe("Bottom Navigation Bar", () => {
       //GIVEN
       const { findByLabelText } = renderRouter(
         {
-          _layout: RootLayout,
+          _layout: RootStack,
           "(tabs)/_layout": () => <TabBar />,
-          "(tabs)/index": HomeScreen,
-          "(tabs)/search": SearchScreen,
-          "(tabs)/upload": UploadScreen,
-          "(tabs)/shop": ShopScreen,
-          "(tabs)/profile": ProfileScreen,
+          "(tabs)/index": () => null,
+          "(tabs)/search": () => null,
+          "(tabs)/upload": () => null,
+          "(tabs)/shop": () => null,
+          "(tabs)/profile": () => null,
         },
         { initialUrl: "(tabs)/" },
       );

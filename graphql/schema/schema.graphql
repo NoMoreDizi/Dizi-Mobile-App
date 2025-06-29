@@ -22,6 +22,11 @@ type Dilemma {
   title: String!
 
   """
+  Optional list of assets to display with the Dilemma.
+  """
+  assets: [DilemmaAsset!]
+
+  """
   The number of votes for this dilemma.
   """
   votes: Int!
@@ -30,6 +35,28 @@ type Dilemma {
   Information about when the dilemma was posted.
   """
   postedBefore: PostedBeforePayload!
+}
+
+"""
+Assets related to a Dilemma.
+"""
+type DilemmaAsset {
+  id: ID!
+
+  """
+  The URL to fetch this asset.
+  """
+  url: String!
+
+  """
+  Blurred Image Hash to display while loading the real asset.
+  """
+  blurhash: String!
+
+  """
+  Label to read aloud for Screen Reader.
+  """
+  accessibilityLabel: String!
 }
 
 """

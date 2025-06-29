@@ -5,6 +5,6 @@ import { ApolloMockType } from "@/mocks/graphql/constants";
 const mockType = ApolloMockType.UI;
 
 export default [
-  ...new UserDetailsMock(mockType).asArray,
-  ...new DilemmaMock(mockType).asArray,
+  ...new UserDetailsMock(mockType).toArray(),
+  ...(await new DilemmaMock(mockType).toArray()),
 ];

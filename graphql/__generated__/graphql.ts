@@ -19,6 +19,8 @@ export type Scalars = {
 /** Represents a dilemma with voting options. */
 export type Dilemma = {
   __typename?: 'Dilemma';
+  /** Optional list of assets to display with the Dilemma. */
+  assets?: Maybe<Array<DilemmaAsset>>;
   id: Scalars['ID']['output'];
   /** Information about when the dilemma was posted. */
   postedBefore: PostedBeforePayload;
@@ -26,6 +28,18 @@ export type Dilemma = {
   title: Scalars['String']['output'];
   /** The number of votes for this dilemma. */
   votes: Scalars['Int']['output'];
+};
+
+/** Assets related to a Dilemma. */
+export type DilemmaAsset = {
+  __typename?: 'DilemmaAsset';
+  /** Label to read aloud for Screen Reader. */
+  accessibilityLabel: Scalars['String']['output'];
+  /** Blurred Image Hash to display while loading the real asset. */
+  blurhash: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  /** The URL to fetch this asset. */
+  url: Scalars['String']['output'];
 };
 
 /** The Duration since when a Dilemma was posted. */
@@ -88,16 +102,21 @@ export type UserDetails = {
   inAppCurrency: Scalars['Int']['output'];
 };
 
+export type DilemmaAssetsFragment = { __typename?: 'Dilemma', assets?: Array<{ __typename?: 'DilemmaAsset', id: string, url: string, blurhash: string, accessibilityLabel: string }> | null } & { ' $fragmentName'?: 'DilemmaAssetsFragment' };
+
 export type DilemmaQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type DilemmaQuery = { __typename?: 'Query', dilemma: { __typename?: 'Dilemma', title: string, votes: number, postedBefore: { __typename?: 'PostedBeforePayload', timestamp: string, duration: { __typename?: 'DurationPayload', type: Period, amount: number } } } };
+export type DilemmaQuery = { __typename?: 'Query', dilemma: (
+    { __typename?: 'Dilemma', title: string, votes: number, postedBefore: { __typename?: 'PostedBeforePayload', timestamp: string, duration: { __typename?: 'DurationPayload', type: Period, amount: number } } }
+    & { ' $fragmentRefs'?: { 'DilemmaAssetsFragment': DilemmaAssetsFragment } }
+  ) };
 
 export type UserDetailsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type UserDetailsQuery = { __typename?: 'Query', userDetails: { __typename?: 'UserDetails', inAppCurrency: number } };
 
-
-export const DilemmaDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Dilemma"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"dilemma"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"votes"}},{"kind":"Field","name":{"kind":"Name","value":"postedBefore"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"timestamp"}},{"kind":"Field","name":{"kind":"Name","value":"duration"},"directives":[{"kind":"Directive","name":{"kind":"Name","value":"client"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}}]}}]}}]}}]}}]} as unknown as DocumentNode<DilemmaQuery, DilemmaQueryVariables>;
+export const DilemmaAssetsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"DilemmaAssets"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Dilemma"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"assets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"blurhash"}},{"kind":"Field","name":{"kind":"Name","value":"accessibilityLabel"}}]}}]}}]} as unknown as DocumentNode<DilemmaAssetsFragment, unknown>;
+export const DilemmaDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Dilemma"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"dilemma"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"DilemmaAssets"}},{"kind":"Field","name":{"kind":"Name","value":"votes"}},{"kind":"Field","name":{"kind":"Name","value":"postedBefore"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"timestamp"}},{"kind":"Field","name":{"kind":"Name","value":"duration"},"directives":[{"kind":"Directive","name":{"kind":"Name","value":"client"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"DilemmaAssets"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Dilemma"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"assets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"blurhash"}},{"kind":"Field","name":{"kind":"Name","value":"accessibilityLabel"}}]}}]}}]} as unknown as DocumentNode<DilemmaQuery, DilemmaQueryVariables>;
 export const UserDetailsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"UserDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"inAppCurrency"}}]}}]}}]} as unknown as DocumentNode<UserDetailsQuery, UserDetailsQueryVariables>;

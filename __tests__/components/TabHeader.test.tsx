@@ -7,7 +7,7 @@ import { UserDetailsMock } from "@/mocks/graphql/UserDetails.mock";
 import type { BottomTabHeaderProps } from "@react-navigation/bottom-tabs";
 import { ignoreFalseActWarning } from "@/helpers/jest";
 import { ApolloMockType } from "@/mocks/graphql/constants";
-import { ApolloMockProvider } from "@/components/Provider/ApolloProvider/ApolloMockProvider";
+import { ApolloMockProvider } from "@/components/provider/ApolloProvider/ApolloMockProvider";
 
 ignoreFalseActWarning();
 
