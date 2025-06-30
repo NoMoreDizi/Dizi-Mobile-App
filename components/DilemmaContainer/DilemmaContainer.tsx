@@ -12,26 +12,44 @@ import {
 } from "react-native";
 import { useSuspenseQuery, gql } from "@apollo/client";
 
-const DILEMMA_QUERY = gql`
-  query GetDilemma($id: ID!) {
-    dilemma(id: $id) {
+export const DILEMMA_QUERY = gql`
+  query GetDilemma {
+    dilemma {
       id
-      question
-      postedAt
-      voteCount
-      imageUrl
-      comments
+      title
+      votes
+      postedBefore {
+        timestamp
+        postedBefore @client
+      }
+      assets {
+        id
+        url
+        accessibilityLabel
+        blurhash
+      }
     }
   }
 `;
 
+interface DilemmaAsset {
+  id: string;
+  url: string;
+  accessibilityLabel: string;
+  blurhash: string;
+}
+
+interface PostedBeforePayload {
+  timestamp: string;
+  postedBefore: string;
+}
+
 interface Dilemma {
   id: string;
-  question: string;
-  postedAt: string;
-  voteCount: number;
-  imageUrl?: string;
-  comments: string[];
+  title: string;
+  votes: number;
+  postedBefore: PostedBeforePayload;
+  assets?: DilemmaAsset[];
 }
 
 interface DilemmaData {
@@ -39,13 +57,12 @@ interface DilemmaData {
 }
 
 interface DilemmaContainerProps {
-  dilemmaId: string;
   children?: ReactNode;
 }
 
-const formatTimeSince = (postedAt: string): string => {
+const formatTimeSince = (timestamp: string): string => {
   const now = new Date();
-  const postedDate = new Date(postedAt);
+  const postedDate = new Date(timestamp);
   const diffInSeconds = Math.floor(
     (now.getTime() - postedDate.getTime()) / 1000,
   );
@@ -59,15 +76,17 @@ const formatTimeSince = (postedAt: string): string => {
   return `${Math.floor(diffInSeconds / 86400)} day${Math.floor(diffInSeconds / 86400) === 1 ? "" : "s"} ago`;
 };
 
+const typeDefs = gql`
+  extend type PostedBeforePayload {
+    postedBefore: String!
+  }
+`;
+
 const { width } = Dimensions.get("window");
 const CARD_WIDTH = Math.min(width, 430);
 
-const DilemmaContainer: React.FC<DilemmaContainerProps> = ({
-  dilemmaId,
-  children,
-}) => {
+const DilemmaContainer: React.FC<DilemmaContainerProps> = ({ children }) => {
   const { data, error } = useSuspenseQuery<DilemmaData>(DILEMMA_QUERY, {
-    variables: { id: dilemmaId },
     errorPolicy: "all",
   });
 
@@ -80,22 +99,18 @@ const DilemmaContainer: React.FC<DilemmaContainerProps> = ({
     );
   }
 
-  if (!data) {
-    return <ActivityIndicator size="large" style={styles.loader} />;
-  }
-
-  if (!data.dilemma) {
+  if (!data?.dilemma) {
     return (
       <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>
-          No dilemma found with ID: {dilemmaId}
-        </Text>
+        <Text style={styles.errorText}>No dilemma found</Text>
       </View>
     );
   }
 
-  const { question, postedAt, voteCount, imageUrl, comments } = data.dilemma;
-  const timeSincePosted = formatTimeSince(postedAt);
+  const { title, votes, postedBefore, assets } = data.dilemma;
+  const timeSincePosted =
+    postedBefore.postedBefore || formatTimeSince(postedBefore.timestamp);
+  const primaryAsset = assets && assets.length > 0 ? assets[0] : null;
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -105,43 +120,31 @@ const DilemmaContainer: React.FC<DilemmaContainerProps> = ({
             <Text style={styles.skipText}>Skip</Text>
           </TouchableOpacity>
         </View>
-        {imageUrl === "Switzerland" ? (
-          <Image
-            source={require("../../assets/images/Dilemma/Switzerland.jpg")}
-            style={styles.image}
-          />
-        ) : imageUrl ? (
-          <Image source={{ uri: imageUrl }} style={styles.image} />
+        {primaryAsset ? (
+          <View style={styles.imageContainer}>
+            <View style={styles.blurhashPlaceholder} />
+            <Image
+              source={{ uri: primaryAsset.url }}
+              style={styles.image}
+              accessibilityLabel={
+                primaryAsset.accessibilityLabel || "Dilemma image"
+              }
+            />
+          </View>
         ) : null}
-
-        <Text style={styles.question}>{question}</Text>
+        <Text style={styles.title}>{title}</Text>
         {children}
         <TouchableOpacity style={styles.sendBtn} onPress={() => {}}>
           <Text style={styles.sendText}>Send</Text>
         </TouchableOpacity>
         <Text style={styles.metaText}>
-          Posted {timeSincePosted} • {voteCount} vote
-          {voteCount !== 1 ? "s" : ""}
+          Posted {timeSincePosted} • {votes} vote{votes !== 1 ? "s" : ""}
         </Text>
-        <Text style={styles.commentsLabel}>Comments</Text>
-        <View style={styles.commentsBox}>
-          {comments && comments.length > 0 ? (
-            comments.map((c, i) => (
-              <View key={i} style={styles.commentRow}>
-                <Text style={styles.commentIcon}>👤</Text>
-                <Text style={styles.commentText}>{c}</Text>
-              </View>
-            ))
-          ) : (
-            <Text style={styles.noComments}>No comments yet.</Text>
-          )}
-        </View>
       </View>
     </SafeAreaView>
   );
 };
 
-// Wrap the component in a Suspense boundary
 const DilemmaContainerWithSuspense: React.FC<DilemmaContainerProps> = (
   props,
 ) => (
@@ -191,16 +194,33 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 17,
   },
+  imageContainer: {
+    position: "relative",
+    width: "100%",
+    height: 200,
+    marginBottom: 22,
+  },
+  blurhashPlaceholder: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    borderRadius: 16,
+    borderWidth: 5,
+    borderColor: "#a259ff",
+    backgroundColor: "#eee",
+    opacity: 0.7,
+  },
   image: {
     width: "100%",
     height: 200,
     borderRadius: 16,
-    marginBottom: 22,
     backgroundColor: "#eee",
     borderWidth: 5,
     borderColor: "#a259ff",
   },
-  question: {
+  title: {
     backgroundColor: "#a259ff",
     color: "#fff",
     borderRadius: 16,
@@ -239,27 +259,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     alignSelf: "center",
   },
-  commentsLabel: {
-    alignSelf: "flex-start",
-    color: "#a259ff",
-    fontWeight: "bold",
-    marginTop: 8,
-    marginBottom: 5,
-    fontSize: 15,
-  },
-  commentsBox: {
-    width: "100%",
-    alignItems: "flex-start",
-    paddingBottom: 16,
-  },
-  commentRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 2,
-  },
-  commentIcon: { marginRight: 6, fontSize: 15 },
-  commentText: { fontSize: 14, color: "#333" },
-  noComments: { color: "#aaa", fontStyle: "italic", fontSize: 13 },
   loader: {
     marginVertical: 24,
   },
