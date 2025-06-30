@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React from "react";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
 const VotingOptionsContainer = () => {
   return (
@@ -16,9 +16,9 @@ const VotingOptionsContainer = () => {
 
 const styles = StyleSheet.create({
   buttonRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
     marginBottom: 8,
   },
   voteBtn: {
@@ -26,14 +26,14 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
     borderRadius: 14,
     paddingVertical: 18,
-    alignItems: 'center',
-    backgroundColor: '#b39ddb',
+    alignItems: "center",
+    backgroundColor: "#b39ddb",
   },
-  yes: { backgroundColor: '#b39ddb' },
-  no: { backgroundColor: '#ce93d8' },
+  yes: { backgroundColor: "#b39ddb" },
+  no: { backgroundColor: "#ce93d8" },
   voteText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
     fontSize: 19,
   },
 });
