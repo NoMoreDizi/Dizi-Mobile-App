@@ -1,0 +1,35 @@
+"""
+This Directive enables client-side Local-only fields from Apollo
+"""
+directive @client on FIELD
+
+"""
+Represents a period type for time-related data.
+"""
+enum PERIOD {
+  NOW
+  MINUTE
+  HOUR
+  DAY
+  WEEK
+  MONTH
+  YEAR
+}
+
+"""
+The Duration since when a Dilemma was posted.
+"""
+type DurationPayload {
+  """
+  The Period in a human-friendly format, e.g one "month".
+  """
+  type: PERIOD!
+  """
+  The amount in Periods, e.g. "2" weeks
+  """
+  amount: Int!
+}
+
+extend type PostedBeforePayload {
+  duration: DurationPayload!
+}

@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Dizi",
-    "slug": "Dizi",
+    "slug": "dizi",
     "version": "0.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/app/logo/DiziAppIcon.png",
@@ -28,6 +28,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "342df62a-a19f-44fc-9f23-b4687d237007"
+      }
+    },
+    "owner": "diziapp"
   }
 }

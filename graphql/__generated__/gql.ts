@@ -14,9 +14,13 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
+    "\n  fragment DilemmaAssets on Dilemma {\n    assets {\n      id\n      url\n      blurhash\n      accessibilityLabel\n    }\n  }\n": typeof types.DilemmaAssetsFragmentDoc,
+    "\n  query Dilemma {\n    dilemma {\n      title\n      ...DilemmaAssets\n      votes\n      postedBefore {\n        timestamp\n        duration @client {\n            type\n            amount\n        }\n      }\n    }\n  }\n": typeof types.DilemmaDocument,
     "\n  query UserDetails {\n    userDetails {\n      inAppCurrency\n    }\n  }\n": typeof types.UserDetailsDocument,
 };
 const documents: Documents = {
+    "\n  fragment DilemmaAssets on Dilemma {\n    assets {\n      id\n      url\n      blurhash\n      accessibilityLabel\n    }\n  }\n": types.DilemmaAssetsFragmentDoc,
+    "\n  query Dilemma {\n    dilemma {\n      title\n      ...DilemmaAssets\n      votes\n      postedBefore {\n        timestamp\n        duration @client {\n            type\n            amount\n        }\n      }\n    }\n  }\n": types.DilemmaDocument,
     "\n  query UserDetails {\n    userDetails {\n      inAppCurrency\n    }\n  }\n": types.UserDetailsDocument,
 };
 
@@ -34,6 +38,14 @@ const documents: Documents = {
  */
 export function gql(source: string): unknown;
 
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  fragment DilemmaAssets on Dilemma {\n    assets {\n      id\n      url\n      blurhash\n      accessibilityLabel\n    }\n  }\n"): (typeof documents)["\n  fragment DilemmaAssets on Dilemma {\n    assets {\n      id\n      url\n      blurhash\n      accessibilityLabel\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query Dilemma {\n    dilemma {\n      title\n      ...DilemmaAssets\n      votes\n      postedBefore {\n        timestamp\n        duration @client {\n            type\n            amount\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query Dilemma {\n    dilemma {\n      title\n      ...DilemmaAssets\n      votes\n      postedBefore {\n        timestamp\n        duration @client {\n            type\n            amount\n        }\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
