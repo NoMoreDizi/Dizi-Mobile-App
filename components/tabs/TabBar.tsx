@@ -16,7 +16,7 @@ export function TabBar({ header }: Readonly<{ header?: typeof TabHeader }>) {
     <Tabs
       screenOptions={{
         tabBarIconStyle: { fontSize: 24 },
-        header: header,
+        header,
         headerStyle: { paddingTop: top },
       }}
     >

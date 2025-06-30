@@ -1,0 +1,53 @@
+name: "Pull-Request Checks"
+
+on:
+  pull_request: # Run only on Pull Requests targeting any branch
+
+jobs:
+  expo-doctor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Base Node.js Setup
+        uses: "./.github/actions/setupNode"
+
+      - name: Run Doctor Checks
+        run: npm run doctor
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Base Node.js Setup
+        uses: "./.github/actions/setupNode"
+
+      - name: Run Lint Checks
+        run: npm run lint
+
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Base Node.js Setup
+        uses: "./.github/actions/setupNode"
+
+      - name: Run TypeScript Check
+        run: npm run tsCheck
+
+  run_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Base Node.js Setup
+        uses: "./.github/actions/setupNode"
+
+      - name: Run Unit Tests
+        run: npm run testFinal
