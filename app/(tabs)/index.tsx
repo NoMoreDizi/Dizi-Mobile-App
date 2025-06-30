@@ -8,8 +8,8 @@ export default function HomeScreen() {
     <View style={styles.container}>
       <Text style={styles.title}></Text>
       <DilemmaContainer dilemmaId="1">
-              <VotingOptionsContainer />
-            </DilemmaContainer>
+        <VotingOptionsContainer />
+      </DilemmaContainer>
     </View>
   );
 }

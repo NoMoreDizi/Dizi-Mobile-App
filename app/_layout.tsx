@@ -3,6 +3,8 @@ import GraphQlMocks from "@/mocks/graphql/index";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { ApolloMockProvider } from "@/components/Provider/ApolloProvider/ApolloMockProvider";
 import { gql } from "@apollo/client";
+import { UserDetailsMock } from "../mocks/graphql/UserDetails.mock";
+import { ApolloMockType } from "../mocks/graphql/constants";
 
 const DILEMMA_QUERY = gql`
   query GetDilemma($id: ID!) {
@@ -13,14 +15,6 @@ const DILEMMA_QUERY = gql`
       voteCount
       imageUrl
       comments
-    }
-  }
-`;
-
-const USER_DETAILS_QUERY = gql`
-  query UserDetails {
-    userDetails {
-      inAppCurrency
     }
   }
 `;
@@ -52,20 +46,7 @@ const createDilemmaMock = (id: string) => ({
   },
 });
 
-const userDetailsMock = {
-  request: {
-    query: USER_DETAILS_QUERY,
-    variables: {},
-  },
-  result: {
-    data: {
-      userDetails: {
-        inAppCurrency: 1000,
-      },
-    },
-  },
-  maxUsageCount: Number.POSITIVE_INFINITY,
-};
+const userDetailsMockInstance = new UserDetailsMock(ApolloMockType.TEST);
 
 const fallbackDilemmaMock = {
   request: {
@@ -80,19 +61,18 @@ const fallbackDilemmaMock = {
         postedAt: new Date().toISOString(),
         voteCount: Math.floor(Math.random() * 200),
         imageUrl: "Switzerland",
-        comments: [
-          "Nice!",
-          "Needs more options.",
-        ],
+        comments: ["Nice!", "Needs more options."],
       },
     },
   }),
 };
 
 const mocks = [
-  ...Array.from({ length: 10 }, (_, i) => createDilemmaMock((i + 1).toString())),
-  userDetailsMock,
+  ...Array.from({ length: 10 }, (_, i) =>
+    createDilemmaMock((i + 1).toString()),
+  ),
   fallbackDilemmaMock,
+  ...userDetailsMockInstance.asArray,
 ];
 
 export default function RootLayout() {
