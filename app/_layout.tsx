@@ -1,6 +1,7 @@
 import GraphQlMocks from "@/mocks/graphql/index";
 import { ApolloMockProvider } from "@/components/provider/ApolloProvider/ApolloMockProvider";
-import RootStack from "@/components/stacks/RootStack";
+import RootStack from "@/components/stacks/RootStack";git fetch origin
+
 import { gql } from "@apollo/client";
 import { UserDetailsMock } from "../mocks/graphql/UserDetails.mock";
 import { ApolloMockType } from "../mocks/graphql/constants";
