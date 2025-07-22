@@ -1,10 +1,18 @@
 import { FieldPolicy, FieldReadFunction, TypePolicies, TypePolicy } from '@apollo/client/cache';
-export type DilemmaKeySpecifier = ('id' | 'postedBefore' | 'title' | 'votes' | DilemmaKeySpecifier)[];
+export type DilemmaKeySpecifier = ('assets' | 'id' | 'postedBefore' | 'title' | 'votes' | DilemmaKeySpecifier)[];
 export type DilemmaFieldPolicy = {
+	assets?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	postedBefore?: FieldPolicy<any> | FieldReadFunction<any>,
 	title?: FieldPolicy<any> | FieldReadFunction<any>,
 	votes?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type DilemmaAssetKeySpecifier = ('accessibilityLabel' | 'blurhash' | 'id' | 'url' | DilemmaAssetKeySpecifier)[];
+export type DilemmaAssetFieldPolicy = {
+	accessibilityLabel?: FieldPolicy<any> | FieldReadFunction<any>,
+	blurhash?: FieldPolicy<any> | FieldReadFunction<any>,
+	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	url?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type DurationPayloadKeySpecifier = ('amount' | 'type' | DurationPayloadKeySpecifier)[];
 export type DurationPayloadFieldPolicy = {
@@ -30,6 +38,10 @@ export type StrictTypedTypePolicies = {
 	Dilemma?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | DilemmaKeySpecifier | (() => undefined | DilemmaKeySpecifier),
 		fields?: DilemmaFieldPolicy,
+	},
+	DilemmaAsset?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | DilemmaAssetKeySpecifier | (() => undefined | DilemmaAssetKeySpecifier),
+		fields?: DilemmaAssetFieldPolicy,
 	},
 	DurationPayload?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | DurationPayloadKeySpecifier | (() => undefined | DurationPayloadKeySpecifier),

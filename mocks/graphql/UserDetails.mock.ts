@@ -8,7 +8,9 @@ import type { GraphQlMock } from "@/mocks/graphql/GraphqlMock";
 export class UserDetailsMock implements GraphQlMock {
   constructor(private readonly mockType: ApolloMockType) {}
 
-  asArray = [this.createUserDetailsMock(randomNumber(10_000))];
+  toArray() {
+    return [this.createUserDetailsMock(randomNumber(10_000))];
+  }
 
   createUserDetailsMock(currency: number): MockedResponse<UserDetailsQuery> {
     return {
