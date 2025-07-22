@@ -2,12 +2,12 @@ import {
   render,
   waitForElementToBeRemoved,
 } from "@testing-library/react-native";
-import { MockedProvider } from "@apollo/client/testing";
 import { TabHeader } from "@/components/header/TabHeader";
 import { UserDetailsMock } from "@/mocks/graphql/UserDetails.mock";
 import type { BottomTabHeaderProps } from "@react-navigation/bottom-tabs";
 import { ignoreFalseActWarning } from "@/helpers/jest";
 import { ApolloMockType } from "@/mocks/graphql/constants";
+import { ApolloMockProvider } from "@/components/provider/ApolloProvider/ApolloMockProvider";
 
 ignoreFalseActWarning();
 
@@ -20,7 +20,7 @@ describe("TabHeader", () => {
   it("renders the Dizi logo, name and swaps Loading indicator with Currency after Suspension", async () => {
     //GIVEN, WHEN
     const { findByLabelText, findByText, getByText } = render(
-      <MockedProvider mocks={[mock]}>
+      <ApolloMockProvider mocks={[mock]}>
         <TabHeader
           {...({
             options: {
@@ -28,14 +28,14 @@ describe("TabHeader", () => {
             },
           } as unknown as BottomTabHeaderProps)}
         />
-      </MockedProvider>,
+      </ApolloMockProvider>,
     );
 
     //THEN
+    await waitForElementToBeRemoved(() => getByText("Loading..."));
+
     expect(await findByText("Dizi")).toBeVisible();
     expect(await findByLabelText("Dizi's round Logo")).toBeVisible();
-
-    await waitForElementToBeRemoved(() => getByText("Loading..."));
 
     expect(await findByText("5000")).toBeVisible();
   });

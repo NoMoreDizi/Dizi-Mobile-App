@@ -14,9 +14,80 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
+/** Represents a dilemma with voting options. */
+export type Dilemma = {
+  __typename?: 'Dilemma';
+  /** Optional list of assets to display with the Dilemma. */
+  assets?: Maybe<Array<DilemmaAsset>>;
+  id: Scalars['ID']['output'];
+  /** Information about when the dilemma was posted. */
+  postedBefore: PostedBeforePayload;
+  /** The title of the Dilemma */
+  title: Scalars['String']['output'];
+  /** The number of votes for this dilemma. */
+  votes: Scalars['Int']['output'];
+};
+
+/** Assets related to a Dilemma. */
+export type DilemmaAsset = {
+  __typename?: 'DilemmaAsset';
+  /** Label to read aloud for Screen Reader. */
+  accessibilityLabel: Scalars['String']['output'];
+  /** Blurred Image Hash to display while loading the real asset. */
+  blurhash: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  /** The URL to fetch this asset. */
+  url: Scalars['String']['output'];
+};
+
+/** The Duration since when a Dilemma was posted. */
+export type DurationPayload = {
+  __typename?: 'DurationPayload';
+  /** The amount in Periods, e.g. "2" weeks */
+  amount: Scalars['Int']['output'];
+  /** The Period in a human-friendly format, e.g one "month". */
+  type: Period;
+};
+
+/** Represents a period type for time-related data. */
+export enum Period {
+  Day = 'DAY',
+  Hour = 'HOUR',
+  Minute = 'MINUTE',
+  Month = 'MONTH',
+  Now = 'NOW',
+  Week = 'WEEK',
+  Year = 'YEAR'
+}
+
+/** Information about when an entity was posted. */
+export type PostedBeforePayload = {
+  __typename?: 'PostedBeforePayload';
+  duration: DurationPayload;
+  timestamp: Scalars['String']['output'];
+};
+
 /** All Entry Points. */
 export type Query = {
   __typename?: 'Query';
+  /**
+   * Fetches a dilemma with its votes and posting time information
+   *
+   * This is to be enriched by a local only Field of type `PostedBefore` on the client.
+   *
+   * # Example
+   *
+   * ```gql
+   * query dilemma {
+   *   votes
+   *   postedBeforeInfo: {
+   *     timestamp
+   *     postedBefore @client #<==
+   *   }
+   * }
+   * ```
+   */
+  dilemma: Dilemma;
   /** Fetches the current User's general data */
   userDetails: UserDetails;
 };
@@ -28,6 +99,13 @@ export type UserDetails = {
   /** How much in App Currency (i.e. Karma) the User currently has. */
   inAppCurrency: Scalars['Int']['output'];
 };
+
+export type DilemmaAssetsFragment = { __typename?: 'Dilemma', assets?: Array<{ __typename?: 'DilemmaAsset', id: string, url: string, blurhash: string, accessibilityLabel: string }> | null };
+
+export type DilemmaQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type DilemmaQuery = { __typename?: 'Query', dilemma: { __typename?: 'Dilemma', title: string, votes: number, postedBefore: { __typename?: 'PostedBeforePayload', timestamp: string, duration: { __typename?: 'DurationPayload', type: Period, amount: number } }, assets?: Array<{ __typename?: 'DilemmaAsset', id: string, url: string, blurhash: string, accessibilityLabel: string }> | null } };
 
 export type UserDetailsQueryVariables = Exact<{ [key: string]: never; }>;
 

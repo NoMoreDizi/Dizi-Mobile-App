@@ -3,11 +3,14 @@ import type { MockedResponse } from "@apollo/client/testing";
 import type { UserDetailsQuery } from "@/graphql/__generated__/types";
 import { GET_USER_DETAILS } from "@/components/header/CurrencyDisplay";
 import type { ApolloMockType } from "@/mocks/graphql/constants";
+import type { GraphQlMock } from "@/mocks/graphql/GraphqlMock";
 
-export class UserDetailsMock {
+export class UserDetailsMock implements GraphQlMock {
   constructor(private readonly mockType: ApolloMockType) {}
 
-  asArray = [this.createUserDetailsMock(randomNumber(10_000))];
+  toArray() {
+    return [this.createUserDetailsMock(randomNumber(10_000))];
+  }
 
   createUserDetailsMock(currency: number): MockedResponse<UserDetailsQuery> {
     return {
