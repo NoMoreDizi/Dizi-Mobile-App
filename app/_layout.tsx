@@ -1,77 +1,43 @@
+feat/updateddilemmacontainer
 import GraphQlMocks from "@/mocks/graphql/index";
 import { ApolloMockProvider } from "@/components/provider/ApolloProvider/ApolloMockProvider";
-import RootStack from "@/components/stacks/RootStack"
-import { gql } from "@apollo/client";
+import RootStack from "@/components/stacks/RootStack";
 import { UserDetailsMock } from "../mocks/graphql/UserDetails.mock";
 import { ApolloMockType } from "../mocks/graphql/constants";
+import { DILEMMA_QUERY } from "../components/DilemmaContainer/DilemmaContainer";
 
-const DILEMMA_QUERY = gql`
-  query GetDilemma($id: ID!) {
-    dilemma(id: $id) {
-      id
-      question
-      postedAt
-      voteCount
-      imageUrl
-      comments
-    }
-  }
-`;
-
-interface GetDilemmaVariables {
-  id: string;
-}
-
-const createDilemmaMock = (id: string) => ({
+const createDilemmaMock = () => ({
   request: {
     query: DILEMMA_QUERY,
-    variables: { id },
   },
+
   result: {
     data: {
       dilemma: {
-        id,
-        question: `Dilemma #${id}: Should I visit this place?`,
-        postedAt: new Date().toISOString(),
-        voteCount: Math.floor(Math.random() * 200),
-        imageUrl: "Switzerland",
-        comments: [
-          "Interesting question!",
-          "I would choose Y.",
-          "Hard to decide...",
+        title: "Should I visit this place?",
+        votes: Math.floor(Math.random() * 200),
+        postedBefore: {
+          timestamp: new Date().toISOString(),
+        },
+        assets: [
+          {
+            id: `asset-${Math.random().toString(36).substring(2, 9)}`,
+            url: "https://example.com/images/dilemma.jpg",
+            accessibilityLabel: "Image for dilemma",
+            blurhash: "",
+          },
         ],
       },
     },
   },
 });
 
+
 const userDetailsMockInstance = new UserDetailsMock(ApolloMockType.TEST);
 
-const fallbackDilemmaMock = {
-  request: {
-    query: DILEMMA_QUERY,
-  },
-  variableMatcher: () => true,
-  result: ({ variables }: { variables: GetDilemmaVariables }) => ({
-    data: {
-      dilemma: {
-        id: variables.id,
-        question: `Generic dilemma (ID: ${variables.id})`,
-        postedAt: new Date().toISOString(),
-        voteCount: Math.floor(Math.random() * 200),
-        imageUrl: "Switzerland",
-        comments: ["Nice!", "Needs more options."],
-      },
-    },
-  }),
-};
-
 const mocks = [
-  ...Array.from({ length: 10 }, (_, i) =>
-    createDilemmaMock((i + 1).toString()),
-  ),
-  fallbackDilemmaMock,
-  ...userDetailsMockInstance.asArray,
+  ...Array.from({ length: 10 }, () => createDilemmaMock()),
+  ...userDetailsMockInstance.toArray(),
 ];
 
 export default function RootLayout() {
