@@ -13,22 +13,31 @@ import {
 import { useSuspenseQuery, gql } from "@apollo/client";
 
 export const DILEMMA_QUERY = gql`
-  query GetDilemma {
-    dilemma {
+  query GetDilemma($id: ID!) {
+    dilemma(id: $id) {
       id
-      title
-      votes
-      postedBefore {
-        timestamp
-        postedBefore @client
-      }
+      question
+      postedAt
+      voteCount
+      imageUrl
+      comments
       assets {
         id
         url
         accessibilityLabel
         blurhash
       }
+      postedBefore {
+        timestamp
+        postedBefore @client
+      }
     }
+  }
+`;
+
+const typeDefs = gql`
+  extend type PostedBeforePayload {
+    postedBefore: String!
   }
 `;
 
@@ -46,10 +55,13 @@ interface PostedBeforePayload {
 
 interface Dilemma {
   id: string;
-  title: string;
-  votes: number;
-  postedBefore: PostedBeforePayload;
+  question: string;
+  postedAt: string;
+  voteCount: number;
+  imageUrl?: string;
+  comments: string[];
   assets?: DilemmaAsset[];
+  postedBefore: PostedBeforePayload;
 }
 
 interface DilemmaData {
@@ -57,6 +69,7 @@ interface DilemmaData {
 }
 
 interface DilemmaContainerProps {
+  dilemmaId: string;
   children?: ReactNode;
 }
 
@@ -76,17 +89,15 @@ const formatTimeSince = (timestamp: string): string => {
   return `${Math.floor(diffInSeconds / 86400)} day${Math.floor(diffInSeconds / 86400) === 1 ? "" : "s"} ago`;
 };
 
-const typeDefs = gql`
-  extend type PostedBeforePayload {
-    postedBefore: String!
-  }
-`;
-
 const { width } = Dimensions.get("window");
 const CARD_WIDTH = Math.min(width, 430);
 
-const DilemmaContainer: React.FC<DilemmaContainerProps> = ({ children }) => {
+const DilemmaContainer: React.FC<DilemmaContainerProps> = ({
+  dilemmaId,
+  children,
+}) => {
   const { data, error } = useSuspenseQuery<DilemmaData>(DILEMMA_QUERY, {
+    variables: { id: dilemmaId },
     errorPolicy: "all",
   });
 
@@ -102,14 +113,14 @@ const DilemmaContainer: React.FC<DilemmaContainerProps> = ({ children }) => {
   if (!data?.dilemma) {
     return (
       <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>No dilemma found</Text>
+        <Text style={styles.errorText}>No dilemma found with ID: {dilemmaId}</Text>
       </View>
     );
   }
 
-  const { title, votes, postedBefore, assets } = data.dilemma;
+  const { question, postedAt, voteCount, imageUrl, comments, assets, postedBefore } = data.dilemma;
   const timeSincePosted =
-    postedBefore.postedBefore || formatTimeSince(postedBefore.timestamp);
+    postedBefore?.postedBefore || formatTimeSince(postedAt || postedBefore.timestamp);
   const primaryAsset = assets && assets.length > 0 ? assets[0] : null;
 
   return (
@@ -131,15 +142,35 @@ const DilemmaContainer: React.FC<DilemmaContainerProps> = ({ children }) => {
               }
             />
           </View>
+        ) : imageUrl === "Switzerland" ? (
+          <Image
+            source={require("../../assets/images/Dilemma/Switzerland.jpg")}
+            style={styles.image}
+          />
+        ) : imageUrl ? (
+          <Image source={{ uri: imageUrl }} style={styles.image} />
         ) : null}
-        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.question}>{question}</Text>
         {children}
         <TouchableOpacity style={styles.sendBtn} onPress={() => {}}>
           <Text style={styles.sendText}>Send</Text>
         </TouchableOpacity>
         <Text style={styles.metaText}>
-          Posted {timeSincePosted} • {votes} vote{votes !== 1 ? "s" : ""}
+          Posted {timeSincePosted} • {voteCount} vote{voteCount !== 1 ? "s" : ""}
         </Text>
+        <Text style={styles.commentsLabel}>Comments</Text>
+        <View style={styles.commentsBox}>
+          {comments && comments.length > 0 ? (
+            comments.map((c, i) => (
+              <View key={i} style={styles.commentRow}>
+                <Text style={styles.commentIcon}>👤</Text>
+                <Text style={styles.commentText}>{c}</Text>
+              </View>
+            ))
+          ) : (
+            <Text style={styles.noComments}>No comments yet.</Text>
+          )}
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -220,7 +251,7 @@ const styles = StyleSheet.create({
     borderWidth: 5,
     borderColor: "#a259ff",
   },
-  title: {
+  question: {
     backgroundColor: "#a259ff",
     color: "#fff",
     borderRadius: 16,
@@ -259,6 +290,27 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     alignSelf: "center",
   },
+  commentsLabel: {
+    alignSelf: "flex-start",
+    color: "#a259ff",
+    fontWeight: "bold",
+    marginTop: 8,
+    marginBottom: 5,
+    fontSize: 15,
+  },
+  commentsBox: {
+    width: "100%",
+    alignItems: "flex-start",
+    paddingBottom: 16,
+  },
+  commentRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 2,
+  },
+  commentIcon: { marginRight: 6, fontSize: 15 },
+  commentText: { fontSize: 14, color: "#333" },
+  noComments: { color: "#aaa", fontStyle: "italic", fontSize: 13 },
   loader: {
     marginVertical: 24,
   },
