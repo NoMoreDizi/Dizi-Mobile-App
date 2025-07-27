@@ -10,8 +10,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Base Node.js Setup
-        uses: "./.github/actions/setupNode"
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.3.0'
 
       - name: Run Doctor Checks
         run: npm run doctor
