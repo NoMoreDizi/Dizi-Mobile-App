@@ -11,12 +11,14 @@ import {
   SafeAreaView,
 } from "react-native";
 import { useSuspenseQuery, gql } from "@apollo/client";
+import { Blurhash } from 'react-native-blurhash';
+import { Image as RNImage } from 'react-native';
 
 export const DILEMMA_QUERY = gql`
   query GetDilemma($id: ID!) {
     dilemma(id: $id) {
       id
-      question
+      title
       postedAt
       voteCount
       imageUrl
@@ -43,7 +45,7 @@ const typeDefs = gql`
 
 interface DilemmaAsset {
   id: string;
-  url: string;
+  url: any;
   accessibilityLabel: string;
   blurhash: string;
 }
@@ -55,7 +57,7 @@ interface PostedBeforePayload {
 
 interface Dilemma {
   id: string;
-  question: string;
+  title: string;
   postedAt: string;
   voteCount: number;
   imageUrl?: string;
@@ -118,10 +120,20 @@ const DilemmaContainer: React.FC<DilemmaContainerProps> = ({
     );
   }
 
-  const { question, postedAt, voteCount, imageUrl, comments, assets, postedBefore } = data.dilemma;
+  const { title, postedAt, voteCount, imageUrl, comments, assets, postedBefore } = data.dilemma;
   const timeSincePosted =
     postedBefore?.postedBefore || formatTimeSince(postedAt || postedBefore.timestamp);
   const primaryAsset = assets && assets.length > 0 ? assets[0] : null;
+
+  const imageSource = primaryAsset
+    ? typeof primaryAsset.url === 'string'
+      ? { uri: primaryAsset.url }
+      : RNImage.resolveAssetSource(primaryAsset.url)
+    : imageUrl === "Switzerland"
+    ? require("../../assets/images/Dilemma/Switzerland.jpg")
+    : imageUrl
+    ? { uri: imageUrl }
+    : null;
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -131,11 +143,16 @@ const DilemmaContainer: React.FC<DilemmaContainerProps> = ({
             <Text style={styles.skipText}>Skip</Text>
           </TouchableOpacity>
         </View>
-        {primaryAsset ? (
+        {primaryAsset && imageSource ? (
           <View style={styles.imageContainer}>
-            <View style={styles.blurhashPlaceholder} />
+            {primaryAsset.blurhash && (
+              <Blurhash
+                blurhash={primaryAsset.blurhash}
+                style={styles.blurhashPlaceholder}
+              />
+            )}
             <Image
-              source={{ uri: primaryAsset.url }}
+              source={imageSource}
               style={styles.image}
               accessibilityLabel={
                 primaryAsset.accessibilityLabel || "Dilemma image"
@@ -150,7 +167,7 @@ const DilemmaContainer: React.FC<DilemmaContainerProps> = ({
         ) : imageUrl ? (
           <Image source={{ uri: imageUrl }} style={styles.image} />
         ) : null}
-        <Text style={styles.question}>{question}</Text>
+        <Text style={styles.question}>{title}</Text>
         {children}
         <TouchableOpacity style={styles.sendBtn} onPress={() => {}}>
           <Text style={styles.sendText}>Send</Text>
@@ -240,8 +257,6 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     borderWidth: 5,
     borderColor: "#a259ff",
-    backgroundColor: "#eee",
-    opacity: 0.7,
   },
   image: {
     width: "100%",

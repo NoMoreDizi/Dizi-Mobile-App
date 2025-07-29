@@ -1,13 +1,14 @@
 import { StyleSheet, Text, View } from "react-native";
-import { useState, useEffect } from "react";
 import DilemmaContainer from "../../components/DilemmaContainer/DilemmaContainer";
 import VotingOptionsContainer from "../../components/DilemmaContainer/VotingOptionsContainer";
 
 export default function HomeScreen() {
+  const dilemmaId = `dilemma-${Math.random().toString(36).substring(2, 9)}`;
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}></Text>
-      <DilemmaContainer dilemmaId="1">
+      <Text style={styles.title}>Dilemma App</Text>
+      <DilemmaContainer dilemmaId={dilemmaId}>
         <VotingOptionsContainer />
       </DilemmaContainer>
     </View>
@@ -26,5 +27,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: "bold",
+    marginBottom: 16,
   },
 });
